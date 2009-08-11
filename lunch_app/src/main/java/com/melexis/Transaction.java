@@ -1,25 +1,43 @@
 package com.melexis;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 
 /**
  *
  * @author brh
  */
-public class Transaction {
+@Entity(name="LUNCH_TRANSACTION")
+public class Transaction implements Serializable {
 
-	private final UserProfile who;
-	private final UserProfile user;
-	private final Date date;
-	private final Collection<Product> products;
-	private final Double amount;
+	@Id @GeneratedValue
+	private Integer id;
+
+	@ManyToOne
+	private UserProfile who;
+	@ManyToOne
+	private UserProfile user;
+	@Temporal(javax.persistence.TemporalType.DATE)
+	private Date transaction_date;
+	private Collection<Product> products;
+	private Double amount;
+
+	public Transaction() {
+
+	}
 
 	public Transaction(UserProfile who, UserProfile user, Date date,
 		Collection<Product> products, Double amount) {
+		this();
 		this.who = who;
 		this.user = user;
-		this.date = date;
+		this.transaction_date = date;
 		this.products = products;
 		this.amount = amount;
 	}
@@ -42,7 +60,7 @@ public class Transaction {
 	 * @return the date
 	 */
 	public Date getDate() {
-		return date;
+		return transaction_date;
 	}
 
 	/**
