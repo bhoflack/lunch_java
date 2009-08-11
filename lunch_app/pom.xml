@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<project>
+    <parent>
+        <artifactId>lunch</artifactId>
+        <groupId>com.melexis</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.melexis</groupId>
+    <artifactId>lunch_app</artifactId>
+    <name>lunch_app</name>
+    <version>1.0-SNAPSHOT</version>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+    </dependencies>
+</project>
