@@ -23,24 +23,13 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>org.springframework.core</artifactId>
             <version>2.5.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core-tiger</artifactId>
-            <version>2.0.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.6</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>2.5.6</version>
+            <version>4.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -9,7 +9,7 @@ import javax.persistence.Id;
  *
  * @author brh
  */
-@Entity
+//@Entity
 public class Product implements Serializable {
 
 	@Id @GeneratedValue

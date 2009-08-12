@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
  *
  * @author brh
  */
-@Entity(name="LUNCH_TRANSACTION")
+//@Entity(name="LUNCH_TRANSACTION")
 public class Transaction implements Serializable {
 
 	@Id @GeneratedValue

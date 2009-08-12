@@ -9,11 +9,16 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import org.hibernate.annotations.NamedQuery;
+
 
 /**
  *
  * @author brh
  */
+
+@NamedQuery(name="userProfile.findByName", query="from UserProfile u where u.name = :name")
+
 @Entity
 public class UserProfile implements Serializable {
 
