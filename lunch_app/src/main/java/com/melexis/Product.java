@@ -9,7 +9,7 @@ import javax.persistence.Id;
  *
  * @author brh
  */
-//@Entity
+@Entity
 public class Product implements Serializable {
 
 	@Id @GeneratedValue
@@ -69,7 +69,7 @@ public class Product implements Serializable {
 		Product o = (Product) other;
 
 		return (name == null)? o.name == null : name.equals(o.name) &&
-			(price == null)? o.price == null : price == o.price;
+			(price == null)? o.price == null : price.equals(o.price);
 	}
 
 	@Override
@@ -78,6 +78,20 @@ public class Product implements Serializable {
 		hash = 47 * hash + (this.name != null ? this.name.hashCode() : 0);
 		hash = 47 * hash + (this.price != null ? this.price.hashCode() : 0);
 		return hash;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @param price the price to set
+	 */
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 

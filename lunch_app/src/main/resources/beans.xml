@@ -7,12 +7,18 @@
         <constructor-arg ref="sessionfactory" />
     </bean>
 
+    <bean id="productRepository" class="com.melexis.repository.ProductRepositoryBean">
+        <constructor-arg ref="sessionfactory" />
+    </bean>
+
     <bean id="sessionfactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="datasource" />
 
         <property name="annotatedClasses" >
             <list>
                 <value>com.melexis.UserProfile</value>
+                <value>com.melexis.Product</value>
+                <value>com.melexis.Transaction</value>
             </list>
         </property>
 

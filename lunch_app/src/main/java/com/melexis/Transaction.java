@@ -7,13 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
  *
  * @author brh
  */
-//@Entity(name="LUNCH_TRANSACTION")
+@Entity(name="LUNCH_TRANSACTION")
 public class Transaction implements Serializable {
 
 	@Id @GeneratedValue
@@ -25,6 +26,7 @@ public class Transaction implements Serializable {
 	private UserProfile user;
 	@Temporal(javax.persistence.TemporalType.DATE)
 	private Date transaction_date;
+	@OneToMany
 	private Collection<Product> products;
 	private Double amount;
 
