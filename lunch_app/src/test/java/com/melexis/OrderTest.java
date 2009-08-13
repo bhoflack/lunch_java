@@ -27,7 +27,7 @@ public class OrderTest {
 	private Product slaatje;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws InsufficientPriviledgesException {
 		brh = new UserProfile("brh", 3.2);
 		slaatje = new Product("slaatje", 3.1);
 
@@ -45,6 +45,20 @@ public class OrderTest {
 	@Test
 	public void testDiffer() {
 		assertNotSame("Different objects should differ.", today, yesterday);
+	}
+
+	@Test(expected=InsufficientPriviledgesException.class)
+	public void testOnlyTheUserOrAdminCanOrderForAnAccount() throws InsufficientPriviledgesException {
+		UserProfile another = new UserProfile("another", 0.);
+		Order o = new Order(another, brh, new Date(), null);
+	}
+
+	@Test
+	public void testAnAdminCanOrderForAnyAccount() throws InsufficientPriviledgesException {
+		UserProfile admin = new UserProfile("admin", 0.0, Boolean.TRUE);
+		Order o = new Order(admin, brh, new Date(), null);
+
+		assertTrue("A admin should be able to order for any account.", true);
 	}
 
 }

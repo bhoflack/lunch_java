@@ -6,6 +6,7 @@
 package com.melexis.integration;
 
 import com.melexis.InsufficientBalanceException;
+import com.melexis.InsufficientPriviledgesException;
 import com.melexis.Order;
 import com.melexis.Product;
 import com.melexis.UserProfile;
@@ -53,7 +54,7 @@ public class OrderRepositoryTest {
 	private Product slaatje;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws InsufficientPriviledgesException {
 		hibernateTemplate = new HibernateTemplate(sessionFactory);
 		
 		brh = new UserProfile("brh", 15.);
@@ -106,7 +107,7 @@ public class OrderRepositoryTest {
 
 	@Test
 	@Transactional
-	public void testOrder() throws InsufficientBalanceException {
+	public void testOrder() throws InsufficientBalanceException, InsufficientPriviledgesException {
 		Order o = new Order(brh, brh, new Date(), Arrays.asList(slaatje));
 		orderRepository.executeOrder(o);
 		doesTheDbContainTheNewOrder(o);
@@ -114,14 +115,14 @@ public class OrderRepositoryTest {
 	}
 
 	@Test(expected=InsufficientBalanceException.class)
-	public void testInvalidOrder() throws InsufficientBalanceException {
+	public void testInvalidOrder() throws InsufficientBalanceException, InsufficientPriviledgesException {
 		Order o  = new Order(userWithoutMoney, userWithoutMoney, new Date(), Arrays.asList(martino));
 		orderRepository.executeOrder(o);
 	}
 
 	@Test
 	@Transactional
-	public void testOrderBalanceBelowZeroAdmin() throws InsufficientBalanceException {
+	public void testOrderBalanceBelowZeroAdmin() throws InsufficientBalanceException, InsufficientPriviledgesException {
 		Order o  = new Order(admin, userWithoutMoney, new Date(), Arrays.asList(martino));
 		orderRepository.executeOrder(o);
 

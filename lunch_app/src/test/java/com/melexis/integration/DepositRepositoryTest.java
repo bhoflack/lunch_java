@@ -6,6 +6,7 @@
 package com.melexis.integration;
 
 import com.melexis.Deposit;
+import com.melexis.InsufficientPriviledgesException;
 import com.melexis.UserProfile;
 import com.melexis.repository.DepositRepository;
 import com.melexis.repository.UserProfileRepository;
@@ -40,6 +41,7 @@ public class DepositRepositoryTest {
 
 	private UserProfile brh;
 	private UserProfile userWithMoney;
+	private UserProfile admin;
 
 
 	@Before
@@ -48,14 +50,16 @@ public class DepositRepositoryTest {
 
 		brh = new UserProfile("brh", 12.);
 		userWithMoney = new UserProfile("userwithmoney", 100.);
+		admin = new UserProfile("admin", 10., Boolean.TRUE);
 
 		t.save(brh);
 		t.save(userWithMoney);
+		t.save(admin);
 	}
 
 	@Test
-	public void deposit() {
-		Deposit deposit = new Deposit(brh, brh, new Date(), 10.);
+	public void deposit() throws InsufficientPriviledgesException {
+		Deposit deposit = new Deposit(admin, brh, new Date(), 10.);
 
 		// make the deposit
 		depositRepository.executeDeposit(deposit);

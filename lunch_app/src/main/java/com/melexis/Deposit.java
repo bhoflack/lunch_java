@@ -21,8 +21,12 @@ public class Deposit extends Transaction {
 		super();
 	}
 
-	public Deposit(UserProfile who, UserProfile user, Date date, Double amount) {
+	public Deposit(UserProfile who, UserProfile user, Date date, Double amount) throws InsufficientPriviledgesException {
 		super(who, user, date, null, amount);
+
+		if (!who.isAdmin()) {
+			throw new InsufficientPriviledgesException();
+		}
 	}
 
 	@Override

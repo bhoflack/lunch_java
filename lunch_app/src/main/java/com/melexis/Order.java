@@ -28,15 +28,22 @@ public class Order extends Transaction {
 	public Order() {}
 
 	public Order(UserProfile who, UserProfile user, Date date, 
-		Collection<Product> products) {
+		Collection<Product> products) throws InsufficientPriviledgesException {
 		super(who, user, date, products, totalAmount(products));
+
+		if (!(who.equals(user)) && !who.isAdmin()) {
+			throw new InsufficientPriviledgesException();
+		}
+		
 	}
 
 	private static Double totalAmount(Collection<Product> products) {
 		Double sum = new Double(0.);
 
-		for (Product p : products) {
-			sum += p.getPrice();
+		if (products != null) {
+			for (Product p : products) {
+				sum += p.getPrice();
+			}
 		}
 
 		return sum;
