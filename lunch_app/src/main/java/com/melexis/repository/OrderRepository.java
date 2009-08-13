@@ -19,7 +19,7 @@ public interface OrderRepository {
 	 * List all the orders made today.
 	 * @return a list of the orders
 	 */
-	List<Order> ordersForToday();
+	List<Order> findOrdersForToday();
 
 	/**
 	 * Save a order to the repository
@@ -28,5 +28,5 @@ public interface OrderRepository {
 	 * @throws insufficientBalanceExecption the user does not have
 	 *		enough money on his account.
 	 */
-	Order order(Order t) throws InsufficientBalanceException;
+	Order executeOrder(Order t) throws InsufficientBalanceException;
 }

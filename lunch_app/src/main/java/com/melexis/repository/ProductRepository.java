@@ -18,26 +18,26 @@ public interface ProductRepository {
 	 * List all the available products
 	 * @return a list of all the products
 	 */
-	List<Product> listAvailable();
+	List<Product> findAvailableProducts();
 
 	/**
 	 * Add a product to the repository
 	 * @param product the product
 	 * @return the saved product
 	 */
-	Product add(Product product);
+	Product addProduct(Product product);
 
 	/**
 	 * Update a product in the repository
 	 * @param product the product
 	 * @return the updated product
 	 */
-	Product update(Product product);
+	Product updateProduct(Product product);
 
 	/**
 	 * Delete a product from the repository
 	 * @param product the product
 	 */
-	void delete(Product product);
+	void deleteProduct(Product product);
 
 }

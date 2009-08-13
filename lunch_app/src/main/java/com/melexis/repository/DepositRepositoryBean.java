@@ -24,7 +24,7 @@ public class DepositRepositoryBean implements DepositRepository {
 		t = new HibernateTemplate(factory);
 	}
 
-	public Deposit deposit(Deposit deposit) {
+	public Deposit executeDeposit(Deposit deposit) {
 		t.save(deposit);
 		UserProfile u = deposit.getUser();
 		u.setBalance(u.getBalance() + deposit.getAmount());

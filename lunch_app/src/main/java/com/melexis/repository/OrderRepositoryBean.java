@@ -6,8 +6,6 @@ package com.melexis.repository;
 
 import com.melexis.InsufficientBalanceException;
 import com.melexis.Order;
-import com.melexis.Transaction;
-import com.melexis.UserProfile;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -21,14 +19,13 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
  */
 public class OrderRepositoryBean implements OrderRepository {
 
-	private HibernateTemplate hibernateTemplate;
+	private final HibernateTemplate hibernateTemplate;
 
 	public OrderRepositoryBean(SessionFactory sessionFactory) {
 		hibernateTemplate = new HibernateTemplate(sessionFactory);
-		hibernateTemplate.setFlushMode(hibernateTemplate.FLUSH_ALWAYS);
 	}
 
-	public List<Order> ordersForToday() {
+	public List<Order> findOrdersForToday() {
 		Calendar c = Calendar.getInstance();
 		GregorianCalendar today = new GregorianCalendar(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE));
 		Calendar tomorrow = Calendar.getInstance();
@@ -37,15 +34,10 @@ public class OrderRepositoryBean implements OrderRepository {
 			new String[] {"date", "maxdate"}, new Date[] {today.getTime(), tomorrow.getTime()});
 	}
 
-	public Order order(Order t) throws InsufficientBalanceException {
+	public Order executeOrder(Order t) throws InsufficientBalanceException {
+		t.getUser().payAmount(t.getAmount(), t.getWho());
 		hibernateTemplate.save(t);
-		UserProfile u = t.getUser();
-		u.setBalance(u.getBalance() - t.getAmount());
-
-		if (u.getBalance() < 0 && !t.getWho().isAdmin()) {
-			throw new InsufficientBalanceException();
-		}
-		hibernateTemplate.merge(u);
+		hibernateTemplate.merge(t.getUser());
 		hibernateTemplate.flush();
 		return t;
 	}

@@ -18,5 +18,5 @@ public interface DepositRepository {
 	 * @param deposit the deposit
 	 * @return the saved deposit
 	 */
-	Deposit deposit(Deposit deposit);
+	Deposit executeDeposit(Deposit deposit);
 }

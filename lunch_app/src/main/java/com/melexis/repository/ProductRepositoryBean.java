@@ -22,21 +22,21 @@ public class ProductRepositoryBean implements ProductRepository {
 		hibernateTemplate = new HibernateTemplate(sessionFactory);
 	}
 
-	public List<Product> listAvailable() {
+	public List<Product> findAvailableProducts() {
 		return hibernateTemplate.find("from Product");
 	}
 
-	public Product add(Product product) {
+	public Product addProduct(Product product) {
 		hibernateTemplate.save(product);
 		return product;
 	}
 
-	public Product update(Product product) {
+	public Product updateProduct(Product product) {
 		hibernateTemplate.update(product);
 		return product;
 	}
 
-	public void delete(Product product) {
+	public void deleteProduct(Product product) {
 		hibernateTemplate.bulkUpdate("delete from Product p where p.id = ?", product.getId());
 		hibernateTemplate.flush();
 	}

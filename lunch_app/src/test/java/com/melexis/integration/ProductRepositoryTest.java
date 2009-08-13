@@ -63,7 +63,7 @@ public class ProductRepositoryTest {
 
 		assertEquals("No products with this name should be available in the db.",
 			0, t.find("from Product p where p.name = ?", p.getName()).size());
-		productRepository.add(p);
+		productRepository.addProduct(p);
 		assertEquals("One product with this name should be available in the db.",
 			1, t.find("from Product p where p.name = ?", p.getName()).size());
 
@@ -74,7 +74,7 @@ public class ProductRepositoryTest {
 	public void testUpdateProduct() {
 		Product p = (Product) t.find("from Product p where p.name = 'sandwich'").get(0);
 		p.setPrice(1.98);
-		p = productRepository.update(p);
+		p = productRepository.updateProduct(p);
 		Product sandwich = (Product) t.find("from Product p where p.name = 'sandwich'").get(0);
 		assertEquals("The update function should update the product in the database.",
 			1.98, sandwich.getPrice().doubleValue(), 0.001);
@@ -85,7 +85,7 @@ public class ProductRepositoryTest {
 		List<Product> products_before = t.find("from Product");
 		assertTrue("The repository should contain the product before deleting",
 			products_before.contains(sandwich));
-		productRepository.delete(sandwich);
+		productRepository.deleteProduct(sandwich);
 		t.flush();
 		List<Product> products = t.find("from Product");
 
@@ -95,7 +95,7 @@ public class ProductRepositoryTest {
 
 	@Test
 	public void testListAvailable() {
-		List<Product> products = productRepository.listAvailable();
+		List<Product> products = productRepository.findAvailableProducts();
 		assertEquals("The list should return all the products.",
 			3, products.size());
 	}

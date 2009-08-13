@@ -44,6 +44,25 @@ public class UserProfile implements Serializable {
 	}
 
 	/**
+	 * Pay an amount from the balance
+	 * @param amount the amount to be payed.
+	 * @param who the person making the payment
+	 * @throws InsufficientBalanceException The user does not have enough
+	 *		balance. ( And the person making the payment is no
+	 *		admin )
+	 */
+	public void payAmount(Double amount, UserProfile who)
+		throws InsufficientBalanceException {
+		Double newbalance = balance - amount;
+
+		if (newbalance < 0 && !who.isAdmin()) {
+			throw new InsufficientBalanceException();
+		}
+
+		balance = newbalance;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public Integer getId() {

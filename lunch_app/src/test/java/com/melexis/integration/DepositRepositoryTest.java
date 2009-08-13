@@ -58,7 +58,7 @@ public class DepositRepositoryTest {
 		Deposit deposit = new Deposit(brh, brh, new Date(), 10.);
 
 		// make the deposit
-		depositRepository.deposit(deposit);
+		depositRepository.executeDeposit(deposit);
 
 		// verify that the deposit has been created
 		List<Deposit> deposits = t.find("from Deposit");

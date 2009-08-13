@@ -98,7 +98,7 @@ public class OrderRepositoryTest {
 
 	@Test
 	public void testOrdersToday() {
-		List<Order> orders = orderRepository.ordersForToday();
+		List<Order> orders = orderRepository.findOrdersForToday();
 
 		assertEquals("The order list should return only the 3 orders for today",
 			3, orders.size());
@@ -108,7 +108,7 @@ public class OrderRepositoryTest {
 	@Transactional
 	public void testOrder() throws InsufficientBalanceException {
 		Order o = new Order(brh, brh, new Date(), Arrays.asList(slaatje));
-		orderRepository.order(o);
+		orderRepository.executeOrder(o);
 		doesTheDbContainTheNewOrder(o);
 		verifyUserBalance(brh, 11.5);
 	}
@@ -116,14 +116,14 @@ public class OrderRepositoryTest {
 	@Test(expected=InsufficientBalanceException.class)
 	public void testInvalidOrder() throws InsufficientBalanceException {
 		Order o  = new Order(userWithoutMoney, userWithoutMoney, new Date(), Arrays.asList(martino));
-		orderRepository.order(o);
+		orderRepository.executeOrder(o);
 	}
 
 	@Test
 	@Transactional
 	public void testOrderBalanceBelowZeroAdmin() throws InsufficientBalanceException {
 		Order o  = new Order(admin, userWithoutMoney, new Date(), Arrays.asList(martino));
-		orderRepository.order(o);
+		orderRepository.executeOrder(o);
 
 		doesTheDbContainTheNewOrder(o);
 		verifyUserBalance(userWithoutMoney, -3.1);
