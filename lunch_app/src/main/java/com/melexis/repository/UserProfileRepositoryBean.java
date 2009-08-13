@@ -8,6 +8,7 @@ import com.melexis.UserProfile;
 import java.util.List;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -21,6 +22,7 @@ public class UserProfileRepositoryBean implements UserProfileRepository {
 		hibernateTemplate = new HibernateTemplate(sessionFactory);
 	}
 
+	@Transactional
 	public UserProfile findUserOrCreateNew(String username) {
 		List users = hibernateTemplate.findByNamedQueryAndNamedParam("userProfile.findByName", "name", username);
 

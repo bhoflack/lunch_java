@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <bean id="userProfileRepository" class="com.melexis.repository.UserProfileRepositoryBean">
         <constructor-arg ref="sessionfactory" />
     </bean>
 
     <bean id="productRepository" class="com.melexis.repository.ProductRepositoryBean">
+        <constructor-arg ref="sessionfactory" />
+    </bean>
+
+    <bean id="orderRepository" class="com.melexis.repository.OrderRepositoryBean">
+        <constructor-arg ref="sessionfactory" />
+    </bean>
+
+    <bean id="depositRepository" class="com.melexis.repository.DepositRepositoryBean">
         <constructor-arg ref="sessionfactory" />
     </bean>
 
@@ -19,9 +29,20 @@
                 <value>com.melexis.UserProfile</value>
                 <value>com.melexis.Product</value>
                 <value>com.melexis.Transaction</value>
+                <value>com.melexis.Order</value>
+                <value>com.melexis.Deposit</value>
             </list>
         </property>
 
         <property name="hibernateProperties" ref="hibernateProperties" />
+    </bean>
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <!-- a PlatformTransactionManager is still required -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <!-- (this dependency is defined somewhere else) -->
+        <property name="dataSource" ref="datasource"/>
     </bean>
 </beans>

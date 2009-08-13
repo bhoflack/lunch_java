@@ -3,9 +3,14 @@ package com.melexis;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -14,8 +19,10 @@ import javax.persistence.Temporal;
  *
  * @author brh
  */
-@Entity(name="LUNCH_TRANSACTION")
-public class Transaction implements Serializable {
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="class",discriminatorType=DiscriminatorType.STRING)
+public abstract class Transaction implements Serializable {
 
 	@Id @GeneratedValue
 	private Integer id;
@@ -26,7 +33,7 @@ public class Transaction implements Serializable {
 	private UserProfile user;
 	@Temporal(javax.persistence.TemporalType.DATE)
 	private Date transaction_date;
-	@OneToMany
+	@ManyToMany(targetEntity=Product.class)
 	private Collection<Product> products;
 	private Double amount;
 
@@ -81,7 +88,7 @@ public class Transaction implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.format("%s performed transaction at %s with amount %d to user %s",getWho(), getDate(), getAmount(), getUser());
+		return String.format("%s performed transaction at %s with amount %s to user %s",getWho(), getDate(), getAmount(), getUser());
 	}
 
 	@Override

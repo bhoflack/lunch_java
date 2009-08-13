@@ -26,15 +26,21 @@ public class UserProfile implements Serializable {
 	private Integer id;
 	private String name;
 	private Double balance;
+	private Boolean admin;
 
 	public UserProfile() {
-
+		this.admin = Boolean.FALSE;
 	}
 
 	public UserProfile(String name, Double balance) {
 		this();
 		this.name = name;
 		this.balance = balance;
+	}
+
+	public UserProfile(String name, Double balance, Boolean admin) {
+		this(name, balance);
+		this.admin = admin;
 	}
 
 	/**
@@ -79,6 +85,20 @@ public class UserProfile implements Serializable {
 		this.balance = balance;
 	}
 
+	/**
+	 * @return the admin
+	 */
+	public Boolean isAdmin() {
+		return admin;
+	}
+
+	/**
+	 * @param admin the admin to set
+	 */
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
+	}
+
 	@Override
 	public String toString() {
 		return this.name;
@@ -92,8 +112,9 @@ public class UserProfile implements Serializable {
 
 		UserProfile o = (UserProfile) other;
 		
-		return (name != null)? o.name == null : name.equals(o.name) &&
-			(balance != null)? o.balance == null : balance.equals(o.balance);
+		return (name != null)? name.equals(o.name) : o.name == null &&
+			(balance != null)? balance.equals(o.balance) : o.balance == null &&
+			(isAdmin() != null)? isAdmin().equals(o.isAdmin()) : o.isAdmin() == null;
 	}
 
 	@Override
@@ -101,6 +122,7 @@ public class UserProfile implements Serializable {
 		int hash = 7;
 		hash = 41 * hash + (this.name != null ? this.name.hashCode() : 0);
 		hash = 41 * hash + (this.balance != null ? this.balance.hashCode() : 0);
+		hash = 41 * hash + (this.isAdmin() != null ? this.isAdmin().hashCode() : 0);
 		return hash;
 	}
 
