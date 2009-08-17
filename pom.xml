@@ -35,5 +35,6 @@
     </dependencies>
     <modules>
         <module>lunch_app</module>
-    </modules>
+    <module>lunch_web</module>
+  </modules>
 </project>

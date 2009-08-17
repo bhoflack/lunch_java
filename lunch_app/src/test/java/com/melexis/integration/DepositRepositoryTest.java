@@ -40,7 +40,6 @@ public class DepositRepositoryTest {
 	private HibernateTemplate t;
 
 	private UserProfile brh;
-	private UserProfile userWithMoney;
 	private UserProfile admin;
 
 
@@ -49,11 +48,9 @@ public class DepositRepositoryTest {
 		t = new HibernateTemplate(sess);
 
 		brh = new UserProfile("brh", 12.);
-		userWithMoney = new UserProfile("userwithmoney", 100.);
 		admin = new UserProfile("admin", 10., Boolean.TRUE);
 
 		t.save(brh);
-		t.save(userWithMoney);
 		t.save(admin);
 	}
 
