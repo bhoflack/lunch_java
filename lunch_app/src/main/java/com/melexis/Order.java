@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
  * @author brh
  */
 @NamedQueries({
-	@NamedQuery(name = "order.findWithUserAndBetweenDateAndMaxdate", query = "from Order o where transaction_date between :date and :maxdate and user = :user"),
+	@NamedQuery(name = "order.findWithUserAndBetweenDateAndMaxdate", query = "from Order o where transaction_date between :date and :maxdate and o.user = :user"),
 	@NamedQuery(name = "order.findBetweenDateAndMaxdate", query = "from Order o where transaction_date between :date and :maxdate")
 })
 @Entity

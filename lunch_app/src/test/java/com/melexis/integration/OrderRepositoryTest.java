@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author brh
  */
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:/beans.xml", "classpath:/test-datasource.xml"})
 public class OrderRepositoryTest {
@@ -95,7 +96,10 @@ public class OrderRepositoryTest {
 		for (Order o : orders) {
 			hibernateTemplate.save(o);
 		}
+
+		hibernateTemplate.flush();
 	}
+
 
 	@Test
 	public void testOrdersToday() {
@@ -128,13 +132,6 @@ public class OrderRepositoryTest {
 
 		doesTheDbContainTheNewOrder(o);
 		verifyUserBalance(userWithoutMoney, -3.1);
-	}
-
-	@Test
-	public void testOrderOverviewTodayForBrh() {
-		List<Order> orders = orderRepository.findOrdersForTodayForUser("brh");
-
-		assertEquals("The order list for today should return 2 orders for brh.", 2, orders.size());
 	}
 
 	@Test

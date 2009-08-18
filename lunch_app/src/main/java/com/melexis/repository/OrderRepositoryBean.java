@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -46,12 +47,14 @@ public class OrderRepositoryBean implements OrderRepository {
 		return t;
 	}
 
+	@Transactional
 	public List<Order> findOrdersForTodayForUser(String username) {
 		Calendar c = Calendar.getInstance();
 		GregorianCalendar today = new GregorianCalendar(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DATE));
 		Calendar tomorrow = Calendar.getInstance();
-		c.add(Calendar.DATE, 1);
+		c.add(Calendar.DAY_OF_YEAR, 1);
 		UserProfile user = userProfileRepository.findUserOrCreateNew(username);
+		System.out.println(String.format("date %s maxdate %s user %s", today.getTime(), tomorrow.getTime(), user));
 		return hibernateTemplate.findByNamedQueryAndNamedParam( "order.findWithUserAndBetweenDateAndMaxdate",
 			new String[] {"date", "maxdate", "user"},
 			new Object[] {today.getTime(), tomorrow.getTime(), user});

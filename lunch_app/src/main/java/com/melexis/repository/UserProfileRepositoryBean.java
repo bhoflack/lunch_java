@@ -33,7 +33,7 @@ public class UserProfileRepositoryBean implements UserProfileRepository {
 				throw new AssertionError("Invalid userprofile");
 			}
 		}
-		
+
 		UserProfile u = new UserProfile(username, 0.0);
 		hibernateTemplate.save(u);
 		hibernateTemplate.flush();
