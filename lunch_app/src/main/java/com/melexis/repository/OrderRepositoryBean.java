@@ -54,7 +54,6 @@ public class OrderRepositoryBean implements OrderRepository {
 		Calendar tomorrow = Calendar.getInstance();
 		c.add(Calendar.DAY_OF_YEAR, 1);
 		UserProfile user = userProfileRepository.findUserOrCreateNew(username);
-		System.out.println(String.format("date %s maxdate %s user %s", today.getTime(), tomorrow.getTime(), user));
 		return hibernateTemplate.findByNamedQueryAndNamedParam( "order.findWithUserAndBetweenDateAndMaxdate",
 			new String[] {"date", "maxdate", "user"},
 			new Object[] {today.getTime(), tomorrow.getTime(), user});
