@@ -6,6 +6,7 @@
 package com.melexis.repository;
 
 import com.melexis.Product;
+import com.melexis.ProductNotFoundException;
 import java.util.List;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -39,6 +40,15 @@ public class ProductRepositoryBean implements ProductRepository {
 	public void deleteProduct(Product product) {
 		hibernateTemplate.bulkUpdate("delete from Product p where p.id = ?", product.getId());
 		hibernateTemplate.flush();
+	}
+
+	public Product findById(Integer id) throws ProductNotFoundException {
+		List<Product> results = hibernateTemplate
+			.find("from Product p where p.id = ?", id);
+		if (results.size() > 0) {
+			return results.get(0);
+		}
+		throw new ProductNotFoundException();
 	}
 
 }

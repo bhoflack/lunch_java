@@ -22,6 +22,13 @@ public interface OrderRepository {
 	List<Order> findOrdersForToday();
 
 	/**
+	 * List all open orders for the given user.
+	 * @param username the user for whom to find the orders.
+	 * @return a list of orders
+	 */
+	List<Order> findOrdersForTodayForUser(String username);
+
+	/**
 	 * Save a order to the repository
 	 * @param t the order to save to the repository
 	 * @return the saved order

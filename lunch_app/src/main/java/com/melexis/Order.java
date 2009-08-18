@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melexis;
 
 import java.util.Collection;
@@ -17,24 +16,25 @@ import javax.persistence.NamedQuery;
  *
  * @author brh
  */
-@NamedQueries(
-	@NamedQuery(name="order.findBetweenDateAndMaxdate", query="from Order o where transaction_date between :date and :maxdate")
-)
-
+@NamedQueries({
+	@NamedQuery(name = "order.findWithUserAndBetweenDateAndMaxdate", query = "from Order o where transaction_date between :date and :maxdate and user = :user"),
+	@NamedQuery(name = "order.findBetweenDateAndMaxdate", query = "from Order o where transaction_date between :date and :maxdate")
+})
 @Entity
 @DiscriminatorValue("ORDER")
 public class Order extends Transaction {
 
-	public Order() {}
+	public Order() {
+	}
 
-	public Order(UserProfile who, UserProfile user, Date date, 
+	public Order(UserProfile who, UserProfile user, Date date,
 		Collection<Product> products) throws InsufficientPriviledgesException {
 		super(who, user, date, products, totalAmount(products));
 
 		if (!(who.equals(user)) && !who.isAdmin()) {
 			throw new InsufficientPriviledgesException();
 		}
-		
+
 	}
 
 	private static Double totalAmount(Collection<Product> products) {
@@ -63,11 +63,10 @@ public class Order extends Transaction {
 		Order o = (Order) other;
 
 
-		return (getWho() != null)? getWho().equals(o.getWho()) : o.getWho() == null &&
-			(getUser() != null)? getUser().equals(o.getUser()) : o.getUser() == null &&
-			(getDate() != null)? getDate().equals(o.getDate()) : o.getDate() == null &&
-			(getProducts() != null)? getProducts().equals(o.getProducts()) : o.getProducts() == null &&
-			(getAmount() != null)? getAmount().equals(o.getAmount()) : o.getAmount() == null;
+		return (getWho() != null) ? getWho().equals(o.getWho()) : o.getWho() == null &&
+			(getUser() != null) ? getUser().equals(o.getUser()) : o.getUser() == null &&
+			(getDate() != null) ? getDate().equals(o.getDate()) : o.getDate() == null &&
+			(getProducts() != null) ? getProducts().equals(o.getProducts()) : o.getProducts() == null &&
+			(getAmount() != null) ? getAmount().equals(o.getAmount()) : o.getAmount() == null;
 	}
-
 }

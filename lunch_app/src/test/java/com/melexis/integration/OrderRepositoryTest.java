@@ -130,6 +130,13 @@ public class OrderRepositoryTest {
 		verifyUserBalance(userWithoutMoney, -3.1);
 	}
 
+	@Test
+	public void testOrderOverviewTodayForBrh() {
+		List<Order> orders = orderRepository.findOrdersForTodayForUser("brh");
+
+		assertEquals("The order list for today should return 2 orders for brh.", 2, orders.size());
+	}
+
 	private void doesTheDbContainTheNewOrder(Order o) throws DataAccessException {
 		// now verify if the order was added to the repository
 		List<Order> orders = hibernateTemplate.find("from Order");

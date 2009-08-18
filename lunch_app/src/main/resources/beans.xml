@@ -15,6 +15,7 @@
 
     <bean id="orderRepository" class="com.melexis.repository.OrderRepositoryBean">
         <constructor-arg ref="sessionfactory" />
+        <constructor-arg ref="userProfileRepository" />
     </bean>
 
     <bean id="depositRepository" class="com.melexis.repository.DepositRepositoryBean">

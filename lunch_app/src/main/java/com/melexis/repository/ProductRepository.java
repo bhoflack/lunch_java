@@ -6,6 +6,7 @@
 package com.melexis.repository;
 
 import com.melexis.Product;
+import com.melexis.ProductNotFoundException;
 import java.util.List;
 
 /**
@@ -19,6 +20,15 @@ public interface ProductRepository {
 	 * @return a list of all the products
 	 */
 	List<Product> findAvailableProducts();
+
+	/**
+	 * Find a product by id.
+	 * @param id The id of the product.
+	 * @return The product
+	 * @throws ProductNotFoundException the product could not be found
+	 * in the repository.
+	 */
+	Product findById(Integer id) throws ProductNotFoundException;
 
 	/**
 	 * Add a product to the repository
