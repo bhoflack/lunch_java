@@ -35,7 +35,8 @@ public class UserProfileRepositoryBean implements UserProfileRepository {
 		}
 		
 		UserProfile u = new UserProfile(username, 0.0);
-		hibernateTemplate.merge(u);
+		hibernateTemplate.save(u);
+		hibernateTemplate.flush();
 		return u;
 	}
 }

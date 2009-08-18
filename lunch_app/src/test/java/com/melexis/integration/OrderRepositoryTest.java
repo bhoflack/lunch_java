@@ -137,6 +137,22 @@ public class OrderRepositoryTest {
 		assertEquals("The order list for today should return 2 orders for brh.", 2, orders.size());
 	}
 
+	@Test
+	public void testOrderOverviewTodayForUserWithMoney() throws InsufficientPriviledgesException {
+		List<Order> orders = orderRepository.findOrdersForTodayForUser(userWithMoney.getName());
+
+		assertEquals("The overview should only contain the order for today.", 1, orders.size());
+		assertTrue("The overview should contain the correct order.",
+			orders.contains(new Order(userWithMoney, userWithMoney, new Date(), Arrays.asList(martino, hamkaas))));
+	}
+
+	@Test
+	public void testOrderOverviewTodayForUnknownUser() {
+		List<Order> orders = orderRepository.findOrdersForTodayForUser("unknown_user");
+
+		assertEquals("The unknown user should not have any orders.", 0, orders.size());
+	}
+
 	private void doesTheDbContainTheNewOrder(Order o) throws DataAccessException {
 		// now verify if the order was added to the repository
 		List<Order> orders = hibernateTemplate.find("from Order");
