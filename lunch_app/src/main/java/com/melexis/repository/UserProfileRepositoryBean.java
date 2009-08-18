@@ -39,4 +39,8 @@ public class UserProfileRepositoryBean implements UserProfileRepository {
 		hibernateTemplate.flush();
 		return u;
 	}
+
+	public List<UserProfile> findAll() {
+		return hibernateTemplate.findByNamedQuery("userProfile.findAll");
+	}
 }

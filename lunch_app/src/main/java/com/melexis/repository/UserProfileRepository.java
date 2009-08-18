@@ -1,6 +1,7 @@
 package com.melexis.repository;
 
 import com.melexis.UserProfile;
+import java.util.List;
 
 /**
  *
@@ -15,5 +16,12 @@ public interface UserProfileRepository {
 	 * @return a UserProfile
 	 */
 	UserProfile findUserOrCreateNew(String username);
+
+
+	/**
+	 * Find all UserProfiles.
+	 * @return a list of UserProfiles.
+	 */
+	List<UserProfile> findAll();
 
 }

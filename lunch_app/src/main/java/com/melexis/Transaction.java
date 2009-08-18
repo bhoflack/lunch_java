@@ -68,7 +68,7 @@ public abstract class Transaction implements Serializable {
 	 * @return the date
 	 */
 	public Date getDate() {
-		return transaction_date;
+		return getTransaction_date();
 	}
 
 	/**
@@ -83,6 +83,62 @@ public abstract class Transaction implements Serializable {
 	 */
 	public Double getAmount() {
 		return amount;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Integer getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	/**
+	 * @param who the who to set
+	 */
+	public void setWho(UserProfile who) {
+		this.who = who;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(UserProfile user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the transaction_date
+	 */
+	public Date getTransaction_date() {
+		return transaction_date;
+	}
+
+	/**
+	 * @param transaction_date the transaction_date to set
+	 */
+	public void setTransaction_date(Date transaction_date) {
+		this.transaction_date = transaction_date;
+	}
+
+	/**
+	 * @param products the products to set
+	 */
+	public void setProducts(Collection<Product> products) {
+		this.products = products;
+	}
+
+	/**
+	 * @param amount the amount to set
+	 */
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
 	@Override
