@@ -37,7 +37,7 @@ public class SortableProductDataProvider extends SortableDataProvider<Product> {
 
 	public Iterator<? extends Product> iterator(int start, int length) {
 		List<Product> p = productRepository.findAvailableProducts();
-		return p.subList(start, length).iterator();
+		return p.subList(start, start + length).iterator();
 	}
 
 	public int size() {
