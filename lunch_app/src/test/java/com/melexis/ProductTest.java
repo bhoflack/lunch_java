@@ -34,4 +34,12 @@ public class ProductTest {
 		assertNotSame("Other products should differ.", martino, slaatje);
 	}
 
+        @Test
+        public void testIsPriceZero() {
+            Product p = new Product("zero price", 0.);
+            assertTrue("Should return true for a zero price.", p.isPriceZero());
+
+            assertFalse("Should return false for a non zer price.", martino.isPriceZero());
+        }
+
 }
