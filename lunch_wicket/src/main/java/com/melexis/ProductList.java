@@ -60,7 +60,7 @@ public class ProductList extends WebPage {
 		columns.add(new PropertyColumn(new Model<String>("Price"), "price"));
 
 		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
-			new SortableProductDataProvider(productRepository), 20);
+			new SortableProductDataProvider(productRepository), 5);
 
 		add(ajaxFallbackDefaultDataTable);
 		add(new AddProductForm("productForm"));

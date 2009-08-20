@@ -30,33 +30,23 @@ import org.apache.wicket.model.IModel;
 public class SortableProductDataProvider extends SortableDataProvider<Product> {
 
 	private final ProductRepository productRepository;
-	private List<Product> products;
 
 	public SortableProductDataProvider(ProductRepository productRepository) {
 		this.productRepository = productRepository;
 	}
 
 	public Iterator<? extends Product> iterator(int start, int length) {
-		List<Product> p = getProducts();
+		List<Product> p = productRepository.findAvailableProducts();
 		return p.subList(start, length).iterator();
 	}
 
 	public int size() {
-		return getProducts().size();
+		return productRepository.findAvailableProducts().size();
 	}
 
 	public IModel<Product> model(Product product) {
 		return new DetachableProductModel(productRepository, product);
 	}
-
-	private List<Product> getProducts() {
-		if (products == null) {
-			products = productRepository.findAvailableProducts();
-		}
-
-		return products;
-	}
-
 	
 
 }
