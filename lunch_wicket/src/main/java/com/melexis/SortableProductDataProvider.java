@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
@@ -47,7 +46,7 @@ public class SortableProductDataProvider extends SortableDataProvider<Product> {
 	}
 
 	public IModel<Product> model(Product product) {
-		return new Model<Product>(product);
+		return new DetachableProductModel(productRepository, product);
 	}
 
 	private List<Product> getProducts() {

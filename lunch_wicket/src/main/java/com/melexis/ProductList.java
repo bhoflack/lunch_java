@@ -20,11 +20,9 @@ package com.melexis;
 import com.melexis.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -32,8 +30,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 /**
@@ -44,7 +40,7 @@ public class ProductList extends WebPage {
 
 	@SpringBean
 	private ProductRepository productRepository;
-//	private final ListView productListView;
+	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
 
 	public ProductList() {
 
@@ -63,36 +59,12 @@ public class ProductList extends WebPage {
 		columns.add(new PropertyColumn(new Model<String>("Name"), "name"));
 		columns.add(new PropertyColumn(new Model<String>("Price"), "price"));
 
-		add(new AjaxFallbackDefaultDataTable<Product>("table", columns,
-			new SortableProductDataProvider(productRepository),20));
+		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
+			new SortableProductDataProvider(productRepository), 20);
 
+		add(ajaxFallbackDefaultDataTable);
 		add(new AddProductForm("productForm"));
 	}
-
-	public final class ActionPanel extends Panel
-	{
-		/**
-		 * @param id
-		 *            component id
-		 * @param model
-		 *            model for contact
-		 */
-		public ActionPanel(String id, IModel<Product> model)
-		{
-			super(id, model);
-			add(new Link("select")
-			{
-				@Override
-				public void onClick()
-				{
-//					selected = (Product)getParent().getDefaultModelObject();
-				}
-			});
-		}
-	}
-
-
-	
 
 	public final class ProductListModel extends LoadableDetachableModel {
 
@@ -119,7 +91,7 @@ public class ProductList extends WebPage {
 		@Override
 		public final void onSubmit() {
 			productRepository.addProduct(product);
-//			productListView.modelChanged();
+			ajaxFallbackDefaultDataTable.modelChanged();
 		}
 	}
 }
