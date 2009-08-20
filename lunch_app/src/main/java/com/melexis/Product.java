@@ -80,6 +80,10 @@ public class Product implements Serializable {
 		return hash;
 	}
 
+        public boolean isPriceZero() {
+            return price.equals(0.);
+        }
+
 	/**
 	 * @param name the name to set
 	 */
