@@ -36,5 +36,7 @@
     <modules>
         <module>lunch_app</module>
     <module>lunch_web</module>
+    <module>lunch_jsf</module>
+    <module>lunch_wicket</module>
   </modules>
 </project>
