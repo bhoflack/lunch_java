@@ -80,17 +80,6 @@ public class ProductList extends WebPage {
         }
 
 	public final class ActionPanel extends Panel {
-		
-		public ActionPanel(String id, IModel<Product> model) {
-			super(id, model);
-
-
-		add(ajaxFallbackDefaultDataTable);
-		add(addProductForm);
-		
-	}
-
-	public final class ActionPanel extends Panel {
 
 		public ActionPanel(String id, IModel<Product> model) {
 			super(id, model);
@@ -105,24 +94,10 @@ public class ProductList extends WebPage {
 				}
 			});
 
-			add(new Link("edit") {
-
-				public void onClick() {
-					Product p = (Product) getParent().getDefaultModelObject();
-				}
-			});
-		}
-	}
-
-
-	public final class ProductForm extends Form {
-		private final Product product;
-		private Boolean add;
-
-			
 			add(EditProduct.link("edit", model, productRepository));
 		}
 	}
+
 
 	public final class ProductForm extends Form {
 		private Product product;
@@ -137,10 +112,6 @@ public class ProductList extends WebPage {
 			add = false;
 			product = p;
 			add(new Label("nameLabel", "name"));
-			add(new TextField("name", new PropertyModel(product, "name")));
-			add(new Label("priceLabel", "price"));
-			add(new TextField("price", new PropertyModel(product, "price")));
-
 			name = new TextField("name", new PropertyModel(product, "name"));
 			add(name);
 			add(new Label("priceLabel", "price"));
