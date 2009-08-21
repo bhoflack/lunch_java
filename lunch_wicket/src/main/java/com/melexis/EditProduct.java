@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.IPageLink;
 import org.apache.wicket.markup.html.link.PageLink;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -79,6 +80,7 @@ public class EditProduct extends WebPage {
 		@Override
 		public void onSubmit() {
 			productRepository.updateProduct(product);
+			setResponsePage(new ProductList());
 		}
 	}
 
