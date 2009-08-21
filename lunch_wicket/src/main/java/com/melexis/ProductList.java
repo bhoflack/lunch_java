@@ -46,7 +46,7 @@ public class ProductList extends WebPage {
 	@SpringBean
 	private ProductRepository productRepository;
 	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
-	private final AddProductForm addProductForm;
+	private final ProductForm addProductForm;
 
 	public ProductList() {
 
@@ -68,7 +68,7 @@ public class ProductList extends WebPage {
 		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
 			new SortableProductDataProvider(productRepository), 5);
 
-		addProductForm = new AddProductForm("productForm");
+		addProductForm = new ProductForm("productForm");
 
 		add(ajaxFallbackDefaultDataTable);
 		add(addProductForm);
@@ -99,22 +99,33 @@ public class ProductList extends WebPage {
 	}
 
 
-	public final class AddProductForm extends Form {
+	public final class ProductForm extends Form {
 		private final Product product;
+		private Boolean add;
 
-		public AddProductForm(final String componentName) {
+		public ProductForm(final String componentName, Product p) {
 			super(componentName);
 
-			product = new Product();
+			add = false;
+			product = p;
 			add(new Label("nameLabel", "name"));
 			add(new TextField("name", new PropertyModel(product, "name")));
 			add(new Label("priceLabel", "price"));
 			add(new TextField("price", new PropertyModel(product, "price")));
 		}
 
+		public ProductForm(final String componentName) {
+			this(componentName, new Product());
+			add = true;
+		}
+
 		@Override
 		public final void onSubmit() {
-			productRepository.addProduct(product);
+			if (add) {
+				productRepository.addProduct(product);
+			} else {
+				productRepository.updateProduct(product);
+			}
 			ajaxFallbackDefaultDataTable.modelChanged();
 		}
 	}
