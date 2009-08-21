@@ -23,13 +23,18 @@ import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 /**
@@ -41,20 +46,21 @@ public class ProductList extends WebPage {
 	@SpringBean
 	private ProductRepository productRepository;
 	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
+	private final AddProductForm addProductForm;
 
 	public ProductList() {
 
 		List<IColumn<Product>> columns = new ArrayList<IColumn<Product>>();
 
 
-//		columns.add(new AbstractColumn<Product>(new Model<Product>("Actions")) {
-//
-//			public void populateItem(Item<ICellPopulator<Product>> cellItem, String componentId,
-//				IModel<Product> model)
-//			{
-//				cellItem.add(new ActionPanel(componentId, model));
-//			}
-//		});
+		columns.add(new AbstractColumn<Product>(new Model<String>("Actions")) {
+
+			public void populateItem(Item<ICellPopulator<Product>> cellItem, String componentId,
+				IModel<Product> model)
+			{
+				cellItem.add(new ActionPanel(componentId, model));
+			}
+		});
 		columns.add(new PropertyColumn(new Model<String>("ID"), "id"));
 		columns.add(new PropertyColumn(new Model<String>("Name"), "name"));
 		columns.add(new PropertyColumn(new Model<String>("Price"), "price"));
@@ -62,18 +68,36 @@ public class ProductList extends WebPage {
 		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
 			new SortableProductDataProvider(productRepository), 5);
 
+		addProductForm = new AddProductForm("productForm");
+
 		add(ajaxFallbackDefaultDataTable);
-		add(new AddProductForm("productForm"));
+		add(addProductForm);
 	}
 
-	public final class ProductListModel extends LoadableDetachableModel {
+	public final class ActionPanel extends Panel {
+		
+		public ActionPanel(String id, IModel<Product> model) {
+			super(id, model);
 
-		@Override
-		protected Object load() {
-			return productRepository.findAvailableProducts();
+			add(new Link("delete") {
+
+				@Override
+				public void onClick() {
+					Product p = (Product) getParent().getDefaultModelObject();
+					productRepository.deleteProduct(p);
+					ajaxFallbackDefaultDataTable.modelChanged();
+				}
+			});
+
+			add(new Link("edit") {
+
+				public void onClick() {
+					Product p = (Product) getParent().getDefaultModelObject();
+				}
+			});
 		}
-
 	}
+
 
 	public final class AddProductForm extends Form {
 		private final Product product;
