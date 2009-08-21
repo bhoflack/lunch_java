@@ -34,6 +34,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
@@ -83,6 +84,17 @@ public class ProductList extends WebPage {
 		public ActionPanel(String id, IModel<Product> model) {
 			super(id, model);
 
+
+		add(ajaxFallbackDefaultDataTable);
+		add(addProductForm);
+		
+	}
+
+	public final class ActionPanel extends Panel {
+
+		public ActionPanel(String id, IModel<Product> model) {
+			super(id, model);
+			
 			add(new Link("delete") {
 
 				@Override
@@ -107,6 +119,18 @@ public class ProductList extends WebPage {
 		private final Product product;
 		private Boolean add;
 
+			
+			add(EditProduct.link("edit", model, productRepository));
+		}
+	}
+
+	public final class ProductForm extends Form {
+		private Product product;
+		private Boolean add;
+
+		private final TextField name;
+		private final TextField price;
+
 		public ProductForm(final String componentName, Product p) {
 			super(componentName);
 
@@ -116,6 +140,12 @@ public class ProductList extends WebPage {
 			add(new TextField("name", new PropertyModel(product, "name")));
 			add(new Label("priceLabel", "price"));
 			add(new TextField("price", new PropertyModel(product, "price")));
+
+			name = new TextField("name", new PropertyModel(product, "name"));
+			add(name);
+			add(new Label("priceLabel", "price"));
+			price = new TextField("price", new PropertyModel(product, "price"));
+			add(price);
 		}
 
 		public ProductForm(final String componentName) {
