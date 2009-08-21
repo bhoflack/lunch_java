@@ -74,6 +74,10 @@ public class ProductList extends WebPage {
 		add(addProductForm);
 	}
 
+        public ProductRepository getProducts() {
+            return this.productRepository;
+        }
+
 	public final class ActionPanel extends Panel {
 		
 		public ActionPanel(String id, IModel<Product> model) {
