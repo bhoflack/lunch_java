@@ -34,6 +34,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
@@ -46,13 +47,9 @@ public class ProductList extends WebPage {
 	@SpringBean
 	private ProductRepository productRepository;
 	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
-//	private final ProductForm addProductForm;
-	private final ProductForm editProductForm;
-
-	private Product selectedProduct;
+	private final ProductForm addProductForm;
 
 	public ProductList() {
-
 		List<IColumn<Product>> columns = new ArrayList<IColumn<Product>>();
 
 
@@ -71,22 +68,19 @@ public class ProductList extends WebPage {
 		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
 			new SortableProductDataProvider(productRepository), 5);
 
-//		addProductForm = new ProductForm("productForm");
-		editProductForm = new ProductForm("productForm");
+		addProductForm = new ProductForm("productForm");
+
 
 		add(ajaxFallbackDefaultDataTable);
-//		add(addProductForm);
-		add(editProductForm);
-		add(new Label("selectedProduct", new PropertyModel<String>(this, "selectedProduct.name")));
-
-
+		add(addProductForm);
+		
 	}
 
 	public final class ActionPanel extends Panel {
-		
+
 		public ActionPanel(String id, IModel<Product> model) {
 			super(id, model);
-
+			
 			add(new Link("delete") {
 
 				@Override
@@ -96,16 +90,10 @@ public class ProductList extends WebPage {
 					ajaxFallbackDefaultDataTable.modelChanged();
 				}
 			});
-
-			add(new Link("edit") {
-
-				public void onClick() {
-					selectedProduct = (Product) getParent().getDefaultModelObject();
-				}
-			});
+			
+			add(EditProduct.link("edit", model, productRepository));
 		}
 	}
-
 
 	public final class ProductForm extends Form {
 		private Product product;
@@ -141,14 +129,6 @@ public class ProductList extends WebPage {
 				productRepository.updateProduct(product);
 			}
 			ajaxFallbackDefaultDataTable.modelChanged();
-		}
-	}
-
-	private Product getSelectedProduct() {
-		if (selectedProduct != null) {
-			return selectedProduct;
-		} else {
-			return new Product();
 		}
 	}
 }
