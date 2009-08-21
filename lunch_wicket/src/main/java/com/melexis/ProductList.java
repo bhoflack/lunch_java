@@ -46,7 +46,10 @@ public class ProductList extends WebPage {
 	@SpringBean
 	private ProductRepository productRepository;
 	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
-	private final ProductForm addProductForm;
+//	private final ProductForm addProductForm;
+	private final ProductForm editProductForm;
+
+	private Product selectedProduct;
 
 	public ProductList() {
 
@@ -68,10 +71,15 @@ public class ProductList extends WebPage {
 		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
 			new SortableProductDataProvider(productRepository), 5);
 
-		addProductForm = new ProductForm("productForm");
+//		addProductForm = new ProductForm("productForm");
+		editProductForm = new ProductForm("productForm");
 
 		add(ajaxFallbackDefaultDataTable);
-		add(addProductForm);
+//		add(addProductForm);
+		add(editProductForm);
+		add(new Label("selectedProduct", new PropertyModel<String>(this, "selectedProduct.name")));
+
+
 	}
 
 	public final class ActionPanel extends Panel {
@@ -92,7 +100,7 @@ public class ProductList extends WebPage {
 			add(new Link("edit") {
 
 				public void onClick() {
-					Product p = (Product) getParent().getDefaultModelObject();
+					selectedProduct = (Product) getParent().getDefaultModelObject();
 				}
 			});
 		}
@@ -100,8 +108,11 @@ public class ProductList extends WebPage {
 
 
 	public final class ProductForm extends Form {
-		private final Product product;
+		private Product product;
 		private Boolean add;
+
+		private final TextField name;
+		private final TextField price;
 
 		public ProductForm(final String componentName, Product p) {
 			super(componentName);
@@ -109,9 +120,12 @@ public class ProductList extends WebPage {
 			add = false;
 			product = p;
 			add(new Label("nameLabel", "name"));
-			add(new TextField("name", new PropertyModel(product, "name")));
+
+			name = new TextField("name", new PropertyModel(product, "name"));
+			add(name);
 			add(new Label("priceLabel", "price"));
-			add(new TextField("price", new PropertyModel(product, "price")));
+			price = new TextField("price", new PropertyModel(product, "price"));
+			add(price);
 		}
 
 		public ProductForm(final String componentName) {
@@ -127,6 +141,14 @@ public class ProductList extends WebPage {
 				productRepository.updateProduct(product);
 			}
 			ajaxFallbackDefaultDataTable.modelChanged();
+		}
+	}
+
+	private Product getSelectedProduct() {
+		if (selectedProduct != null) {
+			return selectedProduct;
+		} else {
+			return new Product();
 		}
 	}
 }
