@@ -14,12 +14,13 @@
  *  limitations under the License.
  *  under the License.
  */
-
 package com.melexis;
 
 import com.melexis.repository.ProductRepository;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -44,94 +45,116 @@ import org.apache.wicket.model.Model;
  */
 public class ProductList extends WebPage {
 
-	@SpringBean
-	private ProductRepository productRepository;
-	private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
-	private final ProductForm addProductForm;
+    @SpringBean
+    private ProductRepository productRepository;
+    private final AjaxFallbackDefaultDataTable<Product> ajaxFallbackDefaultDataTable;
+    private final ProductForm addProductForm;
 
-	public ProductList() {
+    public ProductList() {
 
-		List<IColumn<Product>> columns = new ArrayList<IColumn<Product>>();
+        List<IColumn<Product>> columns = new ArrayList<IColumn<Product>>();
 
 
-		columns.add(new AbstractColumn<Product>(new Model<String>("Actions")) {
+        columns.add(new AbstractColumn<Product>(new Model<String>("Actions")) {
 
-			public void populateItem(Item<ICellPopulator<Product>> cellItem, String componentId,
-				IModel<Product> model)
-			{
-				cellItem.add(new ActionPanel(componentId, model));
-			}
-		});
-		columns.add(new PropertyColumn(new Model<String>("ID"), "id"));
-		columns.add(new PropertyColumn(new Model<String>("Name"), "name"));
-		columns.add(new PropertyColumn(new Model<String>("Price"), "price"));
+            public void populateItem(Item<ICellPopulator<Product>> cellItem, String componentId,
+                    IModel<Product> model) {
+                cellItem.add(new ActionPanel(componentId, model));
+            }
+        });
 
-		ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
-			new SortableProductDataProvider(productRepository), 5);
+        columns.add(new PropertyColumn(new Model<String>("ID"), "id"));
+        columns.add(new PropertyColumn(new Model<String>("Name"), "name"));
+        columns.add(new PropertyColumn(new Model<String>("Price"), "price"));
 
-		addProductForm = new ProductForm("productForm");
+        ajaxFallbackDefaultDataTable = new AjaxFallbackDefaultDataTable<Product>("table", columns,
+                new SortableProductDataProvider(productRepository), 5);
 
-		add(ajaxFallbackDefaultDataTable);
-		add(addProductForm);
-	}
+        addProductForm = new ProductForm("productForm");
 
-        public ProductRepository getProducts() {
-            return this.productRepository;
+        add(ajaxFallbackDefaultDataTable);
+        add(addProductForm);
+    }
+
+    public ProductRepository getProducts() {
+        return this.productRepository;
+    }
+
+    public final class ActionPanel extends Panel {
+
+        public ActionPanel(String id, IModel<Product> model) {
+            super(id, model);
+
+            add(new Link("delete") {
+
+                @Override
+                public void onClick() {
+                    Product p = (Product) getParent().getDefaultModelObject();
+                    productRepository.deleteProduct(p);
+                    ajaxFallbackDefaultDataTable.modelChanged();
+                }
+            });
+
+            add(EditProduct.link("edit", model, productRepository));
+        }
+    }
+
+    public final class ProductForm extends Form {
+
+        private Product product;
+        private Boolean add;
+        private final TextField name;
+        private final TextField price;
+
+        public ProductForm(final String componentName, Product p) {
+            super(componentName);
+
+            add = false;
+            product = p;
+            add(new Label("nameLabel", "name"));
+            name = new TextField("name", new PropertyModel(product, "name"));
+
+            /*
+            AutoCompleteTextField txtName = new AutoCompleteTextField("name", new Model<String>("Name")) {
+
+                protected Iterator getChoices(String input) {
+                    List probables = new ArrayList();
+                    List<Product> products = productRepository.findAvailableProducts();
+
+                    for (Product p : products) {
+                        if (p != null) {
+                            String name = p.getName();
+                            //if (name.startsWith(input)) {
+                                probables.add(name);
+                            //}
+                        }
+                    }
+                    return probables.iterator();
+                }
+            };
+            //addProductForm.add(txtName);
+            add(txtName);
+            */
+
+            add(name);
+            add(new Label("priceLabel", "price"));
+            price = new TextField("price", new PropertyModel(product, "price"));
+            add(price);
         }
 
-	public final class ActionPanel extends Panel {
+        public ProductForm(final String componentName) {
+            this(componentName, new Product());
+            add = true;
+        }
 
-		public ActionPanel(String id, IModel<Product> model) {
-			super(id, model);
-			
-			add(new Link("delete") {
-
-				@Override
-				public void onClick() {
-					Product p = (Product) getParent().getDefaultModelObject();
-					productRepository.deleteProduct(p);
-					ajaxFallbackDefaultDataTable.modelChanged();
-				}
-			});
-
-			add(EditProduct.link("edit", model, productRepository));
-		}
-	}
-
-
-	public final class ProductForm extends Form {
-		private Product product;
-		private Boolean add;
-
-		private final TextField name;
-		private final TextField price;
-
-		public ProductForm(final String componentName, Product p) {
-			super(componentName);
-
-			add = false;
-			product = p;
-			add(new Label("nameLabel", "name"));
-			name = new TextField("name", new PropertyModel(product, "name"));
-			add(name);
-			add(new Label("priceLabel", "price"));
-			price = new TextField("price", new PropertyModel(product, "price"));
-			add(price);
-		}
-
-		public ProductForm(final String componentName) {
-			this(componentName, new Product());
-			add = true;
-		}
-
-		@Override
-		public final void onSubmit() {
-			if (add) {
-				productRepository.addProduct(product);
-			} else {
-				productRepository.updateProduct(product);
-			}
-			ajaxFallbackDefaultDataTable.modelChanged();
-		}
-	}
+        @Override
+        public final void onSubmit() {
+            if (add) {
+                productRepository.addProduct(product);
+            } else {
+                productRepository.updateProduct(product);
+            }
+            ajaxFallbackDefaultDataTable.modelChanged();
+        }
+    }
 }

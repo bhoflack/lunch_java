@@ -21,6 +21,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        <form wicket:id="orderForm">
         <table wicket:id="table">
             <tr>
                 <td><input type="text" wicket:id="quantity" /></td>
@@ -28,5 +29,22 @@
                 <td><span wicket:id="price" /></td>
             </tr>
         </table>
+            <input type="submit" value="order"/>    
+        </form>
+
+        <!--<a href="#" wicket:id="getOrder">add order</a>-->
+        <!--
+        <table wicket:id="orderTable">
+            <tr>
+                <td><span wicket:id="productQuantity" /></td>
+                <td><span wicket:id="productName" /></td>
+                <td><span wicket:id="productPrice" /></td>
+                <td>edit remove</td>
+            </tr>
+            <tr>
+                <td>Total price = <span wicket:id="totalPrice" /></td>
+            </tr>
+        </table>
+        -->
     </body>
 </html>
