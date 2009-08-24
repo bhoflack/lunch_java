@@ -1,7 +1,8 @@
 package com.melexis;
 
-import com.melexis.repository.ProductRepository;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 /**
@@ -9,26 +10,31 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
  * 
  * @see com.melexis.Start#main(String[])
  */
-public class WicketApplication extends WebApplication
-{
+public class WicketApplication extends AuthenticatedWebApplication {
 
-	private ProductRepository productRepository;
-
-	public WicketApplication()
-	{
+	public WicketApplication() {
 	}
 
+	@Override
 	public void init() {
 		super.init();
 		addComponentInstantiationListener(new SpringComponentInjector(this));
 	}
-	
+
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
-	public Class<HomePage> getHomePage()
-	{
+	public Class<HomePage> getHomePage() {
 		return HomePage.class;
 	}
 
+	@Override
+	protected Class<? extends AuthenticatedWebSession> getWebSessionClass() {
+		return LunchAuthenticatedWebSession.class;
+	}
+
+	@Override
+	protected Class<? extends WebPage> getSignInPageClass() {
+		return LoginPage.class;
+	}
 }

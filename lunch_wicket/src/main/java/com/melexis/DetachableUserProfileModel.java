@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 kry.
+ *  Copyright 2009 brh.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,34 +17,27 @@
 
 package com.melexis;
 
-import java.util.Arrays;
-import java.util.Date;
+import com.melexis.repository.UserProfileRepository;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  *
- * @author kry
+ * @author brh
  */
-public class ModelOrder extends Product {
+public class DetachableUserProfileModel extends LoadableDetachableModel<UserProfile> {
 
-    private int quantity;
+	private final String name;
+	private final UserProfileRepository userProfileRepository;
 
-    public ModelOrder(Product p)
-    {
-        super(p.getName(), p.getPrice());
+	public DetachableUserProfileModel(UserProfileRepository userProfileRepository,
+		String name) {
+		this.name = name;
+		this.userProfileRepository = userProfileRepository;
+	}
 
-        this.quantity = 0;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Order createOrder(UserProfile who, UserProfile user) throws InsufficientPriviledgesException {
-	return new Order(who, user, new Date(), Arrays.asList(new Product[] {this}));
-    }
+	@Override
+	protected UserProfile load() {
+		return userProfileRepository.findUserOrCreateNew(name);
+	}
 
 }

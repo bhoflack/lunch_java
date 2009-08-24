@@ -29,11 +29,20 @@ public class HomePage extends WebPage {
 				setResponsePage(ProductList.class);
 			}
 		});
-                add(new Link("orderproduct") {
-                    @Override
-                    public void onClick() {
-                        setResponsePage(OrderProduct.class);
-                    }
-                });
+		add(new Link("orderproduct") {
+
+			@Override
+			public void onClick() {
+				setResponsePage(OrderProduct.class);
+			}
+		});
+		add(new Link("userprofiles") {
+
+			@Override
+			public void onClick() {
+				setResponsePage(UserProfilePage.class);
+			}
+		});
+
 	}
 }

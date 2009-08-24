@@ -1,5 +1,5 @@
 /*
- *  Copyright 2009 kry.
+ *  Copyright 2009 brh.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,34 +17,17 @@
 
 package com.melexis;
 
-import java.util.Arrays;
-import java.util.Date;
+import org.apache.wicket.authentication.pages.SignOutPage;
+import org.apache.wicket.markup.html.link.PageLink;
 
 /**
  *
- * @author kry
+ * @author brh
  */
-public class ModelOrder extends Product {
-
-    private int quantity;
-
-    public ModelOrder(Product p)
-    {
-        super(p.getName(), p.getPrice());
-
-        this.quantity = 0;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public Order createOrder(UserProfile who, UserProfile user) throws InsufficientPriviledgesException {
-	return new Order(who, user, new Date(), Arrays.asList(new Product[] {this}));
-    }
+public class LogoutPage extends SignOutPage {
+	
+	public LogoutPage() {
+		add(new PageLink("home", HomePage.class));
+	}
 
 }

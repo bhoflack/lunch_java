@@ -16,17 +16,23 @@
  */
 package com.melexis;
 
+import com.melexis.repository.DepositRepository;
 import com.melexis.repository.OrderRepository;
 import com.melexis.repository.ProductRepository;
+import com.melexis.repository.UserProfileRepository;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -39,6 +45,15 @@ public class OrderProduct extends WebPage {
 
     @SpringBean
     private ProductRepository productRepository;
+
+    @SpringBean
+    private OrderRepository orderRepository;
+
+    @SpringBean
+    private UserProfileRepository userProfileRepository;
+
+    @SpringBean
+    private DepositRepository depositRepository;
 
     public OrderProduct() {
 
@@ -61,13 +76,27 @@ public class OrderProduct extends WebPage {
             }
 
             @Override
-            protected void populateItem(Item<DetachableModelOrder> item) {
+            protected void populateItem(final Item<DetachableModelOrder> item) {
                 DetachableModelOrder m = item.getModelObject();
                 ModelOrder model = m.getObject();
 
                 item.add(new TextField("quantity", new PropertyModel(model, "quantity")));
                 item.add(new Label("name", model.getName()));
                 item.add(new Label("price", model.getPrice().toString()));
+		item.add(new Link("order") {
+
+					@Override
+					public void onClick() {
+						DetachableModelOrder m = item.getModelObject();
+						UserProfile brh = userProfileRepository.findUserOrCreateNew("brh");
+						try {
+							depositRepository.executeDeposit(new Deposit(brh, brh, new Date(), 15.));
+							orderRepository.executeOrder(m.getObject().createOrder(brh, brh));
+						} catch (Exception ex) {
+							Logger.getLogger(OrderProduct.class.getName()).log(Level.SEVERE, null, ex);
+						}
+					}
+				});
             }
         };
 

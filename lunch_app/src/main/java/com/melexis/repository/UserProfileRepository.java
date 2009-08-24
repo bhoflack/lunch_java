@@ -24,4 +24,10 @@ public interface UserProfileRepository {
 	 */
 	List<UserProfile> findAll();
 
+	/**
+	 * Update the userProfile to the repository.
+	 * @param u the userProfile
+	 */
+	void update(UserProfile u);
+
 }
