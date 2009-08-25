@@ -21,6 +21,7 @@ import com.melexis.repository.UserProfileRepository;
 import org.apache.wicket.Request;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -36,6 +37,7 @@ public class LunchAuthenticatedWebSession extends AuthenticatedWebSession {
 
 	public LunchAuthenticatedWebSession(Request r) {
 		super(r);
+		InjectorHolder.getInjector().inject(this);
 	}
 
 	@Override

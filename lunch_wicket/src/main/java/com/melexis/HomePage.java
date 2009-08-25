@@ -4,6 +4,7 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 
 /**
  * Homepage
@@ -43,6 +44,8 @@ public class HomePage extends WebPage {
 				setResponsePage(UserProfilePage.class);
 			}
 		});
+
+		add(new PageLink("logout", LogoutPage.class));
 
 	}
 }
